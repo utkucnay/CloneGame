@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    const float scaleBills = 0.125f;
+
     public Transform LastKahveLocations;
 
     int ToplamPara = 8;
@@ -20,10 +22,16 @@ public class PlayerController : MonoBehaviour
     private Vector2 initialPosition;
     private Touch touch;
 
+    public Transform FinishBills;
+    public GameObject Bills;
+
+    public bool FinishAnimationLock;
+
     void Update()
     {
         if (!finish)
         {
+            FinishAnimationLock = false;
             ForwardForce();
             //MobileDeviceInput();
             PCInput();
@@ -54,9 +62,66 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //benim dikkatsizliðim yüzünden oranlarý yazýllar kullanmadým mod kullanarak iflere gerek kalmayabilirdi
     private void Finish()
     {
-        transform.position = Vector3.MoveTowards(transform.position,FinishPoint.transform.position,5f*Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position,FinishBills.position + new Vector3(0, 0.1f, 0), 5f*Time.deltaTime);
+        if (transform.position == FinishBills.position + new Vector3(0, 0.1f, 0))
+        {
+            gameObject.transform.GetChild(0).GetComponent<Animator>().SetBool("isDondur",true);
+            if (FinishAnimationLock)
+            {
+                if (ToplamPara > 1000)
+                {
+                    if (Bills.transform.localScale.y <= 6 * scaleBills)
+                    {
+                        Bills.transform.localScale += new Vector3(0, 6* scaleBills * Time.deltaTime, 0);
+                    }
+                }
+                else if (ToplamPara > 750)
+                {
+                    if (Bills.transform.localScale.y <= 5 * scaleBills)
+                    {
+                        Bills.transform.localScale += new Vector3(0, 5 * scaleBills * Time.deltaTime, 0);
+                    }
+                }
+                else if (ToplamPara > 500)
+                {
+                    if (Bills.transform.localScale.y <= 4 * scaleBills)
+                    {
+                        Bills.transform.localScale += new Vector3(0, 4 * scaleBills * Time.deltaTime, 0);
+                    }
+                }
+                else if (ToplamPara > 350)
+                {
+                    if (Bills.transform.localScale.y <= 3 * scaleBills)
+                    {
+                        Bills.transform.localScale += new Vector3(0, 3 * scaleBills * Time.deltaTime, 0);
+                    }
+                }
+                else if (ToplamPara > 256)
+                {
+                    if (Bills.transform.localScale.y <= 2 * scaleBills)
+                    {
+                        Bills.transform.localScale += new Vector3(0, 2 * scaleBills * Time.deltaTime, 0);
+                    }
+                }
+                else
+                {
+                    if (Bills.transform.localScale.y <=  scaleBills)
+                    {
+                        Bills.transform.localScale += new Vector3(0,   scaleBills * Time.deltaTime, 0);
+                    }
+                }
+                
+                if (transform.position.y <= FinishBills.position.y )
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, FinishBills.position + new Vector3(0, 0.1f, 0), 5f * Time.deltaTime);
+                }
+                
+            }
+            
+        }
     }
 
     void ForwardForce()

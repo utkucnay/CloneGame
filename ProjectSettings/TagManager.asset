@@ -9,6 +9,17 @@ TagManager:
   - FinishPoint
   - Engel
   - Para
+  - CremaCup
+  - Collectable
+  - CremaCupGate
+  - EmptyCup
+  - LidMaker
+  - FilledCup
+  - WithPipette
+  - FlowingCoffee
+  - SellField
+  - Barricades
+  - SellKahve
   layers:
   - Default
   - TransparentFX

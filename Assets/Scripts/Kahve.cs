@@ -158,6 +158,7 @@ public class Kahve : MonoBehaviour
         }
         if (other.tag == "SellField")
         {
+            GameObject.FindGameObjectWithTag("SellKahve").GetComponent<Animator>().SetBool("isSell",true);
             if (pc.KahveLenght != 1)
             {
                 
