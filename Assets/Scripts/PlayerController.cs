@@ -7,12 +7,11 @@ public class PlayerController : MonoBehaviour
 {
     public Transform LastKahveLocations;
 
-    public Rigidbody rb;
-
     int ToplamPara = 8;
 
     public float forwardForce = 20f;
     public float sidewaysForce = 200f;
+
     bool finish = false;
     public Transform FinishPoint;
 
@@ -33,7 +32,6 @@ public class PlayerController : MonoBehaviour
         {
             Finish();
         }
-        
     }
 
     public void SetPara(int Para) {
@@ -44,6 +42,18 @@ public class PlayerController : MonoBehaviour
     {
         return ToplamPara;
     }
+
+    public void NewLastKahveLocations(int index)
+    {
+        foreach (var item in GameObject.FindGameObjectsWithTag("EldeKahve"))
+        {
+            if (item.GetComponent<Kahve>().GetSira() == index)
+            {
+                LastKahveLocations = item.transform;
+            }
+        }
+    }
+
     private void Finish()
     {
         transform.position = Vector3.MoveTowards(transform.position,FinishPoint.transform.position,5f*Time.deltaTime);
@@ -73,7 +83,16 @@ public class PlayerController : MonoBehaviour
 
     public void KahveAl(Kahve kahve)
     {
-        kahve.gameObject.transform.position = new Vector3(LastKahveLocations.transform.position.x, transform.position.y, transform.position.z + 2.5f + KahveLenght);
+        kahve.gameObject.transform.position = new Vector3(LastKahveLocations.transform.position.x, transform.position.y, transform.position.z + KahveLenght);
+        if (KahveLenght == 0)
+        {
+
+        }
+        else
+        {
+            LastKahveLocations.gameObject.GetComponent<Kahve>().SetTransformNextCoffee(kahve.transform);
+            
+        }
         LastKahveLocations = kahve.transform;
         kahve.enabled = true;
         kahve.SetSira(KahveLenght);
@@ -96,7 +115,7 @@ public class PlayerController : MonoBehaviour
             {
                 var direction = touch.position - initialPosition;
                 var signedDirection = Mathf.Sign(direction.x);
-                rb.AddForce(sidewaysForce * signedDirection * Time.deltaTime, 0, 0);
+                transform.position += new Vector3(sidewaysForce * signedDirection * Time.deltaTime, 0, 0);
             }
         }
     }
@@ -105,26 +124,30 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             transform.position += new Vector3(sidewaysForce * -1 * Time.deltaTime, 0, 0);
-            KahveLeft();
+            
         }
         else if (Input.GetKey(KeyCode.D))
         {
             transform.position += new Vector3(sidewaysForce * 1 * Time.deltaTime, 0, 0);
-            KahveRight();
         }
     }
-   void KahveLeft()
+
+    public void KahveDuzenle(int index)
     {
-        foreach (var Kahve in GameObject.FindGameObjectsWithTag("EldeKahve"))
+        KahveLenght--;
+        foreach (var item in GameObject.FindGameObjectsWithTag("EldeKahve"))
         {
-            Kahve.GetComponent<Kahve>().Left(sidewaysForce);
+            if(item.GetComponent<Kahve>().GetSira() > index)
+            {
+                Destroy(item);
+                KahveLenght--;
+            }
+            if (item.GetComponent<Kahve>().GetSira() == index - 1)
+            {
+                LastKahveLocations = item.transform;
+            }
         }
-    }
-    void KahveRight()
-    {
-        foreach (var Kahve in GameObject.FindGameObjectsWithTag("EldeKahve"))
-        {
-            Kahve.GetComponent<Kahve>().Right(sidewaysForce);
-        }
+        
+
     }
 }
