@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Kahve : MonoBehaviour
 {
-    enum KahveTurleri
+    public enum KahveTurleri
     {
         CreamaCup,
         EmptyCup,
@@ -167,6 +167,7 @@ public class Kahve : MonoBehaviour
             {
                 pc.LastKahveLocations = pc.transform;
             }
+            GameObject.FindWithTag("SellKahve").GetComponent<SellKahveChanger>().TurChanger((int)Tur);
             pc.KahveDuzenle(Sira);
             Destroy(this.gameObject);
 
