@@ -42,6 +42,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public bool GetFinish()
+    {
+        return finish;
+    }
     public void SetPara(int Para) {
         ToplamPara += Para;
     }

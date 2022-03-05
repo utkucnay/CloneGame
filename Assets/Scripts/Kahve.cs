@@ -14,7 +14,7 @@ public class Kahve : MonoBehaviour
     }
 
     int Para = 8;
-    Transform TransformNextCoffee;
+    public Transform TransformNextCoffee;
     PlayerController pc;
     [SerializeField]
     int Sira;
@@ -51,11 +51,11 @@ public class Kahve : MonoBehaviour
         {
             if (transform.position.x < pc.transform.position.x)
             {
-                transform.position += new Vector3((100f / (Sira + 5)) * Time.deltaTime, 0, 0);
+                transform.position += new Vector3((175f / (Sira + 5)) * Time.deltaTime, 0, 0);
             }
             else if (transform.position.x > pc.transform.position.x)
             {
-                transform.position -= new Vector3((100f / (Sira + 5)) * Time.deltaTime, 0, 0);
+                transform.position -= new Vector3((175f / (Sira + 5)) * Time.deltaTime, 0, 0);
             }
         }
     }
@@ -89,10 +89,12 @@ public class Kahve : MonoBehaviour
     {
         if (TransformNextCoffee != null)
         {
-            TransformNextCoffee.position += new Vector3(0,0,Random.Range(4,9));
+            TransformNextCoffee.position += new Vector3(0,0,Random.Range(6,9));
             TransformNextCoffee.tag = "Kahve";
+            
             TransformNextCoffee.GetComponent<Kahve>().enabled = false;
             TransformNextCoffee.GetComponent<Kahve>().OndekileriDusur();
+            TransformNextCoffee.GetComponent<Kahve>().SetTransformNextCoffee(null);
             pc.SetPara(-TransformNextCoffee.GetComponent<Kahve>().Para);
         }
     }
@@ -108,8 +110,14 @@ public class Kahve : MonoBehaviour
                 if (item.GetComponent<Kahve>().Sira == Sira-1)
                 {
                     pc.LastKahveLocations = item.transform;
+                    item.GetComponent<Kahve>().SetTransformNextCoffee(null);
+                }
+                else
+                {
+                    
                 }
             }
+            pc.KahveLenght = Sira;
             if (pc.KahveLenght != 0)
             {
 
@@ -118,10 +126,10 @@ public class Kahve : MonoBehaviour
             {
                 pc.LastKahveLocations = pc.transform;
             }
-            pc.KahveLenght = Sira;
+            
             OndekileriDusur();
             Destroy(this.gameObject);
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
         }
         if (other.tag == "Finish")
         {
@@ -183,6 +191,6 @@ public class Kahve : MonoBehaviour
 
     void GoFinish()
     {
-        transform.position = Vector3.MoveTowards(transform.position, new Vector3(FinishPoint.transform.position.x, FinishPoint.transform.position.y, FinishPoint.transform.position.z + 2.5f + Sira), 5f * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, new Vector3(FinishPoint.transform.position.x, FinishPoint.transform.position.y, FinishPoint.transform.position.z + 2.5f + Sira), 10f * Time.deltaTime);
     }
 }
