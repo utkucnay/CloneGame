@@ -34,6 +34,7 @@ public class Kahve : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (!Finish)
         {
             ForwardForce();
@@ -44,7 +45,9 @@ public class Kahve : MonoBehaviour
         }
         FollowPlayer();
     }
+    
 
+    
     void FollowPlayer()
     {
         if (transform.position.x - pc.transform.position.x > 0.1f || transform.position.x - pc.transform.position.x < -0.1f)
@@ -91,7 +94,6 @@ public class Kahve : MonoBehaviour
         {
             TransformNextCoffee.position += new Vector3(0,0,Random.Range(6,9));
             TransformNextCoffee.tag = "Kahve";
-            
             TransformNextCoffee.GetComponent<Kahve>().enabled = false;
             TransformNextCoffee.GetComponent<Kahve>().OndekileriDusur();
             TransformNextCoffee.GetComponent<Kahve>().SetTransformNextCoffee(null);
@@ -105,20 +107,9 @@ public class Kahve : MonoBehaviour
         {
 
             pc.SetPara(-Para);
-            foreach (var item in GameObject.FindGameObjectsWithTag("EldeKahve"))
-            {
-                if (item.GetComponent<Kahve>().Sira == Sira-1)
-                {
-                    pc.LastKahveLocations = item.transform;
-                    item.GetComponent<Kahve>().SetTransformNextCoffee(null);
-                }
-                else
-                {
-                    
-                }
-            }
+            
             pc.KahveLenght = Sira;
-            if (pc.KahveLenght != 0)
+            if (Sira != 0)
             {
 
             }
@@ -178,8 +169,6 @@ public class Kahve : MonoBehaviour
             GameObject.FindWithTag("SellKahve").GetComponent<SellKahveChanger>().TurChanger((int)Tur);
             pc.KahveDuzenle(Sira);
             Destroy(this.gameObject);
-
-            //pc.NewLastKahveLocations(Sira-1);
         }
         if (other.tag == "FinishPoint")
         {

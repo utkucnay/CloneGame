@@ -69,11 +69,11 @@ public class PlayerController : MonoBehaviour
     //benim dikkatsizliðim yüzünden oranlarý yazýllar kullanmadým mod kullanarak iflere gerek kalmayabilirdi
     private void Finish()
     {
-        transform.position = Vector3.MoveTowards(transform.position,FinishBills.position + new Vector3(0, 0.1f, 0), 5f*Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position,FinishBills.position + new Vector3(0, 0.1f, 0), 10f*Time.deltaTime);
         if (transform.position == FinishBills.position + new Vector3(0, 0.1f, 0))
         {
             gameObject.transform.GetChild(0).GetComponent<Animator>().SetBool("isDondur",true);
-            if (FinishAnimationLock)
+            if (FinishAnimationLock && GameObject.FindGameObjectWithTag("Camera").transform.position.y - 2.1f <= transform.position.y)
             {
                 if (ToplamPara > 1000)
                 {
@@ -110,7 +110,7 @@ public class PlayerController : MonoBehaviour
                         Bills.transform.localScale += new Vector3(0, 2 * scaleBills * Time.deltaTime, 0);
                     }
                 }
-                else
+                else if(ToplamPara > 0)
                 {
                     if (Bills.transform.localScale.y <=  scaleBills)
                     {
@@ -166,8 +166,10 @@ public class PlayerController : MonoBehaviour
         kahve.enabled = true;
         kahve.SetSira(KahveLenght);
         KahveLenght++;
+        kahve.GetComponent<Animator>().SetBool("KahveAl",true);
         kahve.gameObject.tag = "EldeKahve";
         ToplamPara += kahve.GetPara();
+        
     }
 
     void MobileDeviceInput()
